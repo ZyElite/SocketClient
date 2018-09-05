@@ -5,6 +5,7 @@ import java.net.ServerSocket
 import java.net.Socket
 
 class ServerThread : Runnable {
+
     private val port = 10010
     private var isExit = false
     private var server: ServerSocket? = null
@@ -30,7 +31,6 @@ class ServerThread : Runnable {
                 // 获取手机连接的地址及端口号
                 val address = socket.remoteSocketAddress.toString()
                 println("连接成功，连接的手机为：$address")
-
                 Thread(object : Runnable {
                     override fun run() {
                         try {
@@ -43,18 +43,13 @@ class ServerThread : Runnable {
                             val inputStream = socket.getInputStream()
                             val buffer = ByteArray(1024)
                             var len: Int
-
-                            while (true) {
-
-                            }
-
-                            while ((len = inputStream.read(buffer)) != -1) {
+                            do {
+                                len = inputStream.read(buffer)
                                 val text = String(buffer, 0, len)
                                 println("收到的数据为：$text")
                                 // 在这里群发消息
                                 sendMsgAll(text)
-                            }
-
+                            } while (len != -1)
                         } catch (e: Exception) {
                             println("错误信息为：" + e.message)
                         } finally {
@@ -65,7 +60,6 @@ class ServerThread : Runnable {
                         }
                     }
                 }).start()
-
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -97,7 +91,18 @@ class ServerThread : Runnable {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         return false
+    }
+
+    fun ShowDown() {
+        clientList.forEach { s, socket ->
+            try {
+                socket.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        this.Stop()
+        clientList.clear()
     }
 }
