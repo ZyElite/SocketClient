@@ -84,8 +84,11 @@ class ServerThread : Runnable {
     fun sendMsgAll(msg: String): Boolean {
         try {
             for (socket in clientList.values) {
+                println(socket.isConnected)
                 val outputStream = socket.getOutputStream()
-                outputStream.write(msg.toByteArray(charset("utf-8")))
+                outputStream.write(msg.toByteArray(Charsets.UTF_8))
+                outputStream.flush()
+                println("转发消息:  $msg")
             }
             return true
         } catch (e: Exception) {

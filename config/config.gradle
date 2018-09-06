@@ -1,0 +1,85 @@
+def SupportVersion = "28.0.0-rc02"
+
+def ConstraintLayout = "1.1.3"
+
+def RetrofitVersion = "2.4.0"
+
+def OkHttpVersion = "3.11.0"
+
+def GlideVersion = "4.8.0"
+
+def RxLifecycleVersion = "2.2.1"
+
+def IcepickVersion = "3.2.0"
+
+def RxJavaVersion = "2.2.1"
+
+def RxKotlinVersion = "2.3.0"
+
+def RxAndroidVersion = "2.1.0"
+
+def RxBindingVersion = "2.1.1"
+
+def DaggerVersion = "2.14.1"
+
+def MultiDexVersion = "1.0.2"
+
+def GsonVersion = "2.8.5"
+
+
+ext {
+    applicationId = "com.zy.socketclient"
+    compileSdkVersion = 28
+    minSdkVersion = 16
+    targetSdkVersion = 28
+    versionCode = 1
+    versionName = "1.0"
+    resConfigs = "zh" // 只保留中文
+
+    //retrofit2
+    libRetrofit = "com.squareup.retrofit2:retrofit:${RetrofitVersion}"
+    libConverterJackson = "com.squareup.retrofit2:converter-jackson:${RetrofitVersion}"
+    libConverterGson = "com.squareup.retrofit2:converter-gson:${RetrofitVersion}"
+    libConverterScalars = "com.squareup.retrofit2:converter-scalars:${RetrofitVersion}"
+    libAdapterRxjava2 = "com.squareup.retrofit2:adapter-rxjava2:${RetrofitVersion}"
+    libOkhttp3 = "com.squareup.okhttp3:okhttp:${OkHttpVersion}"
+    libGson = "com.google.code.gson:gson:${GsonVersion}"
+    libOkhtpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${OkHttpVersion}"
+    //libLogger = "com.orhanobut:logger:${LoggerVersion}"
+
+    //Rx系列
+    libRxJava = "io.reactivex.rxjava2:rxjava:${RxJavaVersion}"
+    libRxAndroid = "io.reactivex.rxjava2:rxandroid:${RxAndroidVersion}"
+    libRxBinding = "com.jakewharton.rxbinding2:rxbinding:${RxBindingVersion}"
+    libRxKotlin = "io.reactivex.rxjava2:rxkotlin:${RxKotlinVersion}"
+
+    // rx管理activity生命周器
+    libRxlifecycle = "com.trello.rxlifecycle2:rxlifecycle:${RxLifecycleVersion}"
+    libRxlifecycleComponents = "com.trello.rxlifecycle2:rxlifecycle-components:${RxLifecycleVersion}"
+    libIcepick = "frankiesardo:icepick:${IcepickVersion}"
+    libIcepickProcessor = "frankiesardo:icepick-processor:${IcepickVersion}"
+    //Support
+    libSupportV4 = "com.android.support:support-v4:${SupportVersion}"
+    libSupportV7 = "com.android.support:appcompat-v7:${SupportVersion}"
+    libSupportCardview = "com.android.support:cardview-v7:${SupportVersion}"
+    libSupportPercent = "com.android.support:percent:${SupportVersion}"
+    libSupportRecyclerview = "com.android.support:recyclerview-v7:${SupportVersion}"
+    libConstraintLayout = "com.android.support.constraint:constraint-layout:${ConstraintLayout}"
+    libSupportAnnotations = "com.android.support:support-annotations:${SupportVersion}"
+    //图片加载库
+    libGlide = "com.github.bumptech.glide:glide:${GlideVersion}"
+    libGlideCompiler = "com.github.bumptech.glide:compiler:${GlideVersion}"
+
+    //注解框架
+    libDagger = "com.google.dagger:dagger-android:${DaggerVersion}"
+    libDaggerSupport = "com.google.dagger:dagger-android-support:${DaggerVersion}"
+    libDaggerCompiler = "com.google.dagger:dagger-compiler:${DaggerVersion}"
+    //MultiDex
+    libMultDex = "com.android.support:multidex:${MultiDexVersion}"
+
+    LibKotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+}
+
+
+

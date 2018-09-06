@@ -3,33 +3,132 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+//解决 kotlin 与 databinding或dagger 兼容
+apply plugin: 'kotlin-kapt'
+
+//realm 轻量级数据库
+apply plugin: 'realm-android'
+
 
 android {
-    compileSdkVersion 28
-    defaultConfig {
-        applicationId "com.zy.socketclient"
-        minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    compileSdkVersion parent.ext.compileSdkVersion
+
+    //解决RxJava版本冲突问题
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
     }
+
+    defaultConfig {
+        applicationId parent.ext.applicationId
+        minSdkVersion parent.ext.minSdkVersion
+        targetSdkVersion parent.ext.targetSdkVersion
+        versionCode parent.ext.versionCode
+        versionName parent.ext.versionName
+        resConfigs parent.ext.resConfigs
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        //方法超过65535
+        multiDexEnabled true
+
+    }
+//    configurations.all {
+//        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
+//    }
+
+//    signingConfigs  {
+//        release {
+//            storeFile(file((buildProperties.getLocal['sign_path'] | buildProperties.getPublic['sign_path']).string))
+//            storePassword((buildProperties.getLocal['store_password'] | buildProperties.getPublic['store_password']).string)
+//            keyAlias((buildProperties.getLocal['key_alias'] | buildProperties.getPublic['key_alias']).string)
+//            keyPassword((buildProperties.getLocal['key_password'] | buildProperties.getPublic['key_password']).string)
+//        }
+//    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.release
+        }
+        debug {
+            //signingConfig signingConfigs.release
         }
     }
-}
 
+//    configurations.all {
+//        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
+//    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+
+    dataBinding {
+        enabled = false
+    }
+}
+//解决 kotlin 与 databinding或dagger2 兼容
+kapt {
+    generateStubs = true
+}
+//realm 数据库
+realm {
+    syncEnabled = true
+    kotlinExtensionsEnabled = true
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
+    implementation parent.ext.libSupportV4
+    implementation parent.ext.libSupportV7
+    implementation parent.ext.libSupportCardview
+    implementation parent.ext.libSupportPercent
+    implementation parent.ext.libSupportRecyclerview
+    implementation parent.ext.libConstraintLayout
+    implementation parent.ext.libSupportAnnotations
+
+
+    implementation parent.ext.LibKotlin
+
+    implementation parent.ext.libRetrofit
+    //转换为json
+    implementation parent.ext.libConverterJackson
+    //转换为对象
+    implementation parent.ext.libConverterGson
+    //转换为字符串
+    implementation parent.ext.libConverterScalars
+    implementation parent.ext.libAdapterRxjava2
+    implementation parent.ext.libOkhttp3
+    implementation parent.ext.libGson
+    implementation parent.ext.libRxKotlin
+    implementation parent.ext.libRxJava
+
+    implementation parent.ext.libRxAndroid
+    implementation parent.ext.libRxBinding
+
+    //implementation parent.ext.libRxlifecycle;
+    // implementation parent.ext.libRxlifecycleComponents;
+    //implementation parent.ext.libIcepick;
+    // provided parent.ext.libIcepickProcessor;
+    implementation parent.ext.libGlide
+    annotationProcessor parent.ext.libGlideCompiler
+
+    implementation parent.ext.libDagger
+    implementation parent.ext.libDaggerSupport
+    annotationProcessor parent.ext.libDaggerCompiler
+    kapt parent.ext.libDaggerCompiler
+
+
+    implementation parent.ext.libMultDex
+
+//    implementation parent.ext.libLogger;
+    //  kapt parent.ext.LibKotlinDataBinging;
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.android.support:recyclerview-v7:28.0.0-rc02'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }
 
