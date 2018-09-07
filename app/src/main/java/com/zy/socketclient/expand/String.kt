@@ -4,6 +4,7 @@ import android.text.TextUtils
 import android.util.Log
 
 private const val TAG = "ZyElite"
+
 fun String.log() {
     Log.e(generateTag(), this)
 }

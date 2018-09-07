@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zy.socketclient.model.Message
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.im_chat_left_layout.view.*
 import kotlinx.android.synthetic.main.im_chat_right_layout.view.*
 
@@ -12,7 +13,7 @@ import kotlinx.android.synthetic.main.im_chat_right_layout.view.*
  *chat adapter
  */
 class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var mDatas = mutableListOf<Message>()
+    private var mDatas: RealmResults<Message>? = null
 
     /**
      * init const
@@ -25,13 +26,17 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     /**
      * replace msg data
      */
-    fun replace(messages: List<Message>) {
-        mDatas.clear()
-        mDatas.addAll(messages)
+    fun replace(messages: RealmResults<Message>) {
+        mDatas = messages
+        notifyItemInserted(messages.size - 1)
+    }
+
+    fun add(messages: RealmResults<Message>) {
+        mDatas = messages
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (mDatas[position].id == 1) RIGHT else LEFT
+        return if (mDatas?.get(position)?.id == 1) RIGHT else LEFT
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -51,20 +56,20 @@ class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         val itemViewType = getItemViewType(position)
-        val message = mDatas[position]
+        val message = mDatas?.get(position)
         when (itemViewType) {
             LEFT -> {
-                viewHolder.itemView.leftTvContent.text = message.content
+                viewHolder.itemView.leftTvContent.text = message?.content ?: ""
             }
             RIGHT -> {
-                viewHolder.itemView.rightTvContent.text = message.content
+                viewHolder.itemView.rightTvContent.text = message?.content ?: ""
             }
         }
     }
 
 
     override fun getItemCount(): Int {
-        return mDatas.size
+        return mDatas?.size ?: 0
     }
 
 
