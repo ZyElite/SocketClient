@@ -7,6 +7,7 @@ import com.zy.socketclient.expand.log
 import com.zy.socketclient.expand.query
 import com.zy.socketclient.expand.save
 import com.zy.socketclient.model.Message
+import com.zy.socketclient.socket.SocketClient
 import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        SocketClient.client?.connect()
+
         val adapter = ChatAdapter()
         recycle.adapter = adapter
         adapter.replace(query<Message> {
@@ -83,7 +87,6 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
-
 
 
 }
