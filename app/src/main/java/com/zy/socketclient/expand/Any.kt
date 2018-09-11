@@ -1,28 +1,32 @@
 package com.zy.socketclient.expand
 
+import android.annotation.SuppressLint
+import android.text.TextUtils
+import android.util.Log
+import io.realm.BuildConfig
 import io.realm.Realm
 import io.realm.RealmResults
 
-val mRealm = Realm.getDefaultInstance()!!
-
+private const val TAG = "ZyElite"
 
 /**
- * Synchronous access
+ * @desc Synchronous access
+ * @thread create thread
  */
 fun save(body: (realm: Realm) -> Unit) {
-    save({ mRealm.beginTransaction() }, {
-        body(mRealm)
-    }, { mRealm.commitTransaction() })
+    val realm = Realm.getDefaultInstance()
+    save({ realm.beginTransaction() }, {
+        body(realm)
+    }, { realm.commitTransaction() })
 }
 
-fun save() {
 
-}
 /**
- * query
+ * @desc query
+ * @thread create thread
  */
 fun query(function: (realm: Realm) -> Unit) {
-    function(mRealm)
+    function(Realm.getDefaultInstance())
 }
 
 /**
@@ -30,11 +34,25 @@ fun query(function: (realm: Realm) -> Unit) {
  */
 
 fun <T> query(function: (realm: Realm) -> RealmResults<T>): RealmResults<T> {
-    return function(mRealm)
+    return function(Realm.getDefaultInstance())
 }
 
 private fun save(start: () -> Unit, body: (realm: Realm) -> Unit, end: () -> Unit) {
     start()
-    body(mRealm)
+    body(Realm.getDefaultInstance())
     end()
+}
+
+/**
+ * 当前执行线程
+ */
+fun currentThreadName() {
+    Log.e(TAG, Thread.currentThread().name)
+}
+
+/**
+ * 是否执行
+ */
+fun isRun() {
+    Log.e(TAG, "run")
 }
