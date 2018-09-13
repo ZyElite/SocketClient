@@ -9,14 +9,12 @@ import java.util.concurrent.LinkedBlockingQueue
  * @des SendThread
  */
 class SendThread : Runnable {
-    private val queue = SocketClient.queue()
     override fun run() {
         try {
             while (true) {
-                Log.e("SendThread", "发送线程开启了")
-                if (queue.isNotEmpty()) {
+                if (SocketClient.queue().isNotEmpty()) {
                     val outputStream = SocketClient.get()?.getOutputStream()
-                    outputStream?.write(queue?.take())
+                    outputStream?.write(SocketClient.queue().take())
                     outputStream?.flush()
                 }
             }
@@ -24,6 +22,5 @@ class SendThread : Runnable {
             println("发送线程已经关闭了")
         }
     }
-
 
 }
