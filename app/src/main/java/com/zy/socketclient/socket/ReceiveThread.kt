@@ -18,7 +18,7 @@ class ReceiveThread : Runnable {
                             val createObject = it.createObject(Message::class.java)
                             createObject.date = System.currentTimeMillis().toString()
                             createObject.id = 2
-                            createObject.name = "对方"
+                            createObject.name = "测试二"
                             createObject.content = content + "转发"
                         }
                     } != -1) {

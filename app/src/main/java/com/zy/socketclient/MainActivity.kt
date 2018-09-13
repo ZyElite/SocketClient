@@ -18,9 +18,6 @@ import io.realm.RealmChangeListener
 
 class MainActivity : AppCompatActivity() {
 
-
-//    private var socket: Socket? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,12 +32,6 @@ class MainActivity : AppCompatActivity() {
             results
         })
         SocketClient.connect()
-//        Thread {
-//            startClient()
-//        }.start()
-//        thread(true, false, classLoader, "service", 1) {
-//
-//        }.start()
         sendView.setSendListener(View.OnClickListener {
             //send
             val content = sendView.getText().toString()
@@ -48,42 +39,12 @@ class MainActivity : AppCompatActivity() {
                 val createObject = it.createObject(Message::class.java)
                 createObject.date = System.currentTimeMillis().toString()
                 createObject.id = 1
-                createObject.name = "测试仪"
+                createObject.name = "测试一"
                 createObject.content = content
             }
             SocketClient.send(content.toByteArray(Charsets.UTF_8))
-//            Thread {
-//                val outputStream = socket?.getOutputStream()
-//                outputStream?.write(content.toByteArray(Charsets.UTF_8))
-//                outputStream?.flush()
-//            }.start()
 
         })
-    }
-
-
-    fun startClient() {
-        //客户端请求与本机在10010端口建立TCP连接
-        try {
-//            socket = Socket("192.168.98.110", 10010)
-//            socket?.keepAlive = true
-//            val inputStream = socket?.getInputStream()
-//            val buffer = ByteArray(1024)
-//            var len: Int
-//            do {
-//                len = inputStream?.read(buffer)!!
-//                val data = String(buffer, 0, len)
-//                save {
-//                    val createObject = it.createObject(Message::class.java)
-//                    createObject.date = System.currentTimeMillis().toString()
-//                    createObject.id = 2
-//                    createObject.name = "对方"
-//                    createObject.content = data + "转发"
-//                }
-//            } while (len != -1)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
     }
 
 
