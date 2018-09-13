@@ -5,27 +5,28 @@ import android.util.Log
 import com.zy.socketclient.expand.isRun
 import java.io.IOException
 import java.net.Socket
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.*
 
 
 object SocketClient {
-
+    private const val SEND_DATA_THREAD = "SendDataThread"
     private var socket: Socket? = null
-    private var basket: BlockingQueue<ByteArray> = LinkedBlockingQueue<ByteArray>()
+    private var basket: LinkedBlockingQueue<ByteArray> = LinkedBlockingQueue<ByteArray>()
     private var sendThread: Thread? = null
     private var receiveThread: Thread? = null
     private var socketThread: Thread? = null
-
+    private var mEnqueuePacketExecutor: ExecutorService? = null
     fun get(): Socket? = socket
 
-    fun queue(): BlockingQueue<ByteArray> = basket
-
+    fun queue(): LinkedBlockingQueue<ByteArray> = basket
 
     @Throws(InterruptedException::class)
     fun send(byteArray: ByteArray) {
-        Log.e("send", "${sendThread?.isInterrupted} == ${receiveThread?.isInterrupted} ")
-        basket.put(byteArray)
+        Log.e("asd1", "${basket.size}")
+        mEnqueuePacketExecutor?.execute {
+            basket.put(byteArray)
+            Log.e("asd2", "${basket.size}")
+        }
     }
 
     /**
@@ -36,7 +37,6 @@ object SocketClient {
             if (socket == null) {
                 isRun()
                 socketThread = Thread {
-                    //客户端请求与本机在10010端口建立TCP连接
                     createClient()
                 }
                 socketThread?.start()
@@ -44,6 +44,7 @@ object SocketClient {
                 sendThread?.start()
                 receiveThread = Thread(ReceiveThread())
                 receiveThread?.start()
+                mEnqueuePacketExecutor = Executors.newSingleThreadExecutor { r -> Thread(r, SEND_DATA_THREAD) }
             }
         }
     }

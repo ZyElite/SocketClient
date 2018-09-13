@@ -11,14 +11,9 @@ import com.zy.socketclient.model.Message
 class ReceiveThread : Runnable {
     override fun run() {
         try {
-            while (true) {
-                val inputStream = SocketClient.get()?.getInputStream()
-                inputStream?.let {
-                    val byteArray = ByteArray(1024)
-                    var read: Int
-                    do {
-                        read = inputStream.read(byteArray)
-                        val content = String(byteArray, 0, read)
+            var byteArray = ByteArray(1024)
+            while (SocketClient.get()?.getInputStream()?.read(byteArray)?.apply {
+                        val content = String(byteArray, 0, this)
                         save {
                             val createObject = it.createObject(Message::class.java)
                             createObject.date = System.currentTimeMillis().toString()
@@ -26,11 +21,30 @@ class ReceiveThread : Runnable {
                             createObject.name = "对方"
                             createObject.content = content + "转发"
                         }
-                    } while (read != -1)
-                }
+                    } != -1) {
+                byteArray = ByteArray(1024)
             }
         } catch (e: InterruptedException) {
             println("接收线程已经关闭了")
         }
     }
 }
+
+//                while (true) {
+//                    val inputStream = SocketClient.get()?.getInputStream()
+//                    inputStream?.let {
+//                        val byteArray = ByteArray(1024)
+//                        var read: Int
+//                        do {
+//                            read = inputStream.read(byteArray)
+//                            val content = String(byteArray, 0, read)
+//                            save {
+//                                val createObject = it.createObject(Message::class.java)
+//                                createObject.date = System.currentTimeMillis().toString()
+//                                createObject.id = 2
+//                                createObject.name = "对方"
+//                                createObject.content = content + "转发"
+//                            }
+//                        } while (read != -1)
+//                    }
+//        }
