@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
                 createObject.content = content
             }
             SocketClient.send(content.toByteArray(Charsets.UTF_8))
-
         })
     }
 
