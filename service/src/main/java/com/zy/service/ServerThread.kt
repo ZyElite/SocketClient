@@ -43,13 +43,12 @@ class ServerThread : Runnable {
                             }
                             // 定义输入流
 
-                            while (true){
-
+                            while (true) {
                                 val bytes = mutableListOf<Byte>()
                                 var data: Int = -1
                                 var bLength: Int = -1
+                                var body = 0
                                 while ({ data = socket.getInputStream().read();data }() != -1) {
-                                    println("server：")
                                     bytes.add(data.toByte())
                                     if (bytes.size == 4) {
                                         //版本信息
@@ -67,16 +66,22 @@ class ServerThread : Runnable {
 
                                     if (bytes.size == 12) {
                                         val body = ByteArray(4)
-                                        for (byte in 9 until 12) {
+                                        for (byte in 8 until 12) {
                                             body[byte - 8] = bytes[byte]
                                         }
                                         bLength = bytesToInt(body)
                                         println("body：$bLength")
                                     }
-                                    if (bytes.size == (12 + bLength)) {
-                                        val string = String(bytes.toByteArray(), 12, bLength)
-                                        println("收到的信息为：$string")
-                                        break
+                                    if (bLength != -1) {
+                                        if (body == bLength) {
+                                            val byteArray = bytes.toByteArray()
+                                            val string = String(byteArray, 12, bLength)
+                                            println("收到的信息为：$string")
+                                            sendMsgAll(byteArray)
+                                            bytes.clear()
+                                            break
+                                        }
+                                        body++
                                     }
                                 }
                             }

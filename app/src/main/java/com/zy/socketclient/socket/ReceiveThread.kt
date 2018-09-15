@@ -4,22 +4,64 @@ import android.util.Log
 import com.zy.socketclient.expand.isRun
 import com.zy.socketclient.expand.save
 import com.zy.socketclient.model.Message
+import com.zy.socketclient.socket.utils.SocketHelp.bytesToInt
 
 /**
  * @des ReceiveThread
  */
 class ReceiveThread : Runnable {
+
     override fun run() {
         try {
             while (true) {
-                    val result = mutableListOf<Byte>()
+                while (true) {
+                    val bytes = mutableListOf<Byte>()
                     var data: Int = -1
-
-                    //            var byteArray = ByteArray(1024)
+                    var bLength: Int = -1
+                    var body = 0
                     while ({ data = SocketClient.get()?.getInputStream()?.read() ?: -1;data }() != -1) {
-                        result.add(data.toByte())
-                        Log.e("ReceiveThread", "end ${result.size}")
+                        bytes.add(data.toByte())
+                        if (bytes.size == 4) {
+                            //版本信息
+                            val version = bytesToInt(bytes.toByteArray())
+                            println("version：$version")
+                        }
+                        if (bytes.size == 8) {
+                            val all = ByteArray(4)
+                            for (byte in 4 until 8) {
+                                all[byte - 4] = bytes[byte]
+                            }
+                            val length = bytesToInt(all)
+                            println("length：$length")
+                        }
+
+                        if (bytes.size == 12) {
+                            val body = ByteArray(4)
+                            for (byte in 8 until 12) {
+                                body[byte - 8] = bytes[byte]
+                            }
+                            bLength = bytesToInt(body)
+                            println("body：$bLength")
+                        }
+                        if (bLength != -1) {
+                            if (body == bLength) {
+                                val string = String(bytes.toByteArray(), 12, bLength)
+                                println("收到的信息为：$string")
+                                save {
+                                    val createObject = it.createObject(Message::class.java)
+                                    createObject.date = System.currentTimeMillis().toString()
+                                    createObject.id = 2
+                                    createObject.name = "测试二"
+                                    createObject.content = string + "转发"
+                                }
+                                bytes.clear()
+                                break
+                            }
+                            body++
+                        }
                     }
+                }
+
 
             }
 

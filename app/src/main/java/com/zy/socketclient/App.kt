@@ -19,7 +19,7 @@ class App : MultiDexApplication() {
         Realm.init(this)
         //配置Realm数据库
         val config = RealmConfiguration.Builder()
-                .schemaVersion(1)
+                .schemaVersion(3)
                 .name(resources.getString(R.string.app_name)).build()
         Realm.setDefaultConfiguration(config)
     }

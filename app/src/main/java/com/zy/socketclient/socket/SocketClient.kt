@@ -3,6 +3,9 @@ package com.zy.socketclient.socket
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.Log
 import com.zy.socketclient.expand.isRun
+import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
+import com.zy.socketclient.socket.utils.SocketHelp.getHeadData
+import com.zy.socketclient.socket.utils.SocketHelp.intToBytes
 import java.io.IOException
 import java.net.Socket
 import java.util.concurrent.*
@@ -21,42 +24,11 @@ object SocketClient {
     fun queue(): LinkedBlockingQueue<ByteArray> = basket
     @Throws(InterruptedException::class)
     fun send(byteArray: ByteArray) {
-        val pack = byteMerger(getHeadData(byteArray.size), byteArray)
+        val first = getHeadData(byteArray.size)
+        val pack = byteMerger(first, byteArray)
         basket.put(pack)
     }
 
-    /**
-     * 0-4   版本号
-     * 4-8   总长度
-     * 8-12  内容长度
-     */
-    private fun getHeadData(bodyLen: Int): ByteArray {
-        val verLenB = intToBytes(1)
-        Log.e("shuchu1", "$verLenB")
-        val verAndBodyB = intToBytes(verLenB.size + bodyLen)
-        val bodyLenB = intToBytes(bodyLen)
-        return byteMerger(byteMerger(verLenB, verAndBodyB), bodyLenB)
-    }
-
-    private fun intToBytes(value: Int): ByteArray = byteArrayOf(
-            (value shr 24 and 0xFF).toByte(),
-            (value shr 16 and 0xFF).toByte(),
-            (value shr 8 and 0xFF).toByte(),
-            (value and 0xFF).toByte())
-
-    private fun bytesToInt(bytes: ByteArray): Int = (
-            bytes[3].toInt() and 0xFF) or
-            ((bytes[2].toInt() and 0xFF) shl 8) or
-            ((bytes[1].toInt() and 0xFF) shl 16) or
-            ((bytes[0].toInt() and 0xFF) shl 24)
-
-
-    private fun byteMerger(first: ByteArray, second: ByteArray): ByteArray {
-        val third = ByteArray(first.size + second.size)
-        System.arraycopy(first, 0, third, 0, first.size)
-        System.arraycopy(second, 0, third, first.size, second.size)
-        return third
-    }
 
     /**
      * connect socket

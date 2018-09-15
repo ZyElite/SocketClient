@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+
 //解决 kotlin 与 databinding或dagger 兼容
 apply plugin: 'kotlin-kapt'
 
@@ -17,7 +18,9 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
-
+//    dexOptions {
+//        incremental false
+//    }
     defaultConfig {
         applicationId parent.ext.applicationId
         minSdkVersion parent.ext.minSdkVersion
@@ -78,7 +81,9 @@ realm {
     syncEnabled = true
     kotlinExtensionsEnabled = true
 }
+
 dependencies {
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation parent.ext.libSupportV4
@@ -129,6 +134,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }
 
