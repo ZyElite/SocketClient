@@ -1,6 +1,7 @@
 package com.zy.socketclient.socket.utils
 
 object SocketHelp {
+
     fun intToBytes(value: Int): ByteArray = byteArrayOf(
             (value shr 24 and 0xFF).toByte(),
             (value shr 16 and 0xFF).toByte(),
@@ -21,15 +22,5 @@ object SocketHelp {
         return third
     }
 
-    /**
-     * 0-4   版本号
-     * 4-8   总长度
-     * 8-12  内容长度
-     */
-    fun getHeadData(bodyLen: Int): ByteArray {
-        val verLenB = intToBytes(1)
-        val verAndBodyB = intToBytes(verLenB.size + bodyLen)
-        val bodyLenB = intToBytes(bodyLen)
-        return byteMerger(byteMerger(verLenB, verAndBodyB), bodyLenB)
-    }
+
 }

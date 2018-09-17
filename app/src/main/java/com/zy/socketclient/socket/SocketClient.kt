@@ -3,6 +3,7 @@ package com.zy.socketclient.socket
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.Log
 import com.zy.socketclient.expand.isRun
+import com.zy.socketclient.socket.utils.SocketHelp
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
 import com.zy.socketclient.socket.utils.SocketHelp.getHeadData
 import com.zy.socketclient.socket.utils.SocketHelp.intToBytes
@@ -14,7 +15,7 @@ import java.util.concurrent.*
 object SocketClient {
     private const val SEND_DATA_THREAD = "SendDataThread"
     private var socket: Socket? = null
-    private var basket: LinkedBlockingQueue<ByteArray> = LinkedBlockingQueue<ByteArray>()
+    private var basket: LinkedBlockingQueue<ByteArray> = LinkedBlockingQueue()
     private var sendThread: Thread? = null
     private var receiveThread: Thread? = null
     private var socketThread: Thread? = null

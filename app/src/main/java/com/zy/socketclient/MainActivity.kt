@@ -9,6 +9,7 @@ import com.zy.socketclient.expand.query
 import com.zy.socketclient.expand.save
 import com.zy.socketclient.model.Message
 import com.zy.socketclient.socket.SocketClient
+import com.zy.socketclient.socket.SocketPacketConfig
 import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,6 +38,11 @@ class MainActivity : AppCompatActivity() {
             })
             results
         })
+
+
+        SocketPacketConfig.
+
+
         SocketClient.connect()
         sendView.setSendListener(View.OnClickListener {
             //send
