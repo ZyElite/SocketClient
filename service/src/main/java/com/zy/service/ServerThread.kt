@@ -3,6 +3,7 @@ package com.zy.service
 import java.io.IOException
 import java.net.ServerSocket
 import java.net.Socket
+import java.util.*
 import kotlin.experimental.and
 import kotlin.experimental.or
 
@@ -50,32 +51,15 @@ class ServerThread : Runnable {
                                 var body = 0
                                 while ({ data = socket.getInputStream().read();data }() != -1) {
                                     bytes.add(data.toByte())
-                                    if (bytes.size == 4) {
-                                        //版本信息
-                                        val version = bytesToInt(bytes.toByteArray())
-                                        println("version：$version")
-                                    }
-                                    if (bytes.size == 8) {
-                                        val all = ByteArray(4)
-                                        for (byte in 4 until 8) {
-                                            all[byte - 4] = bytes[byte]
-                                        }
-                                        val length = bytesToInt(all)
-                                        println("length：$length")
-                                    }
-
-                                    if (bytes.size == 12) {
-                                        val body = ByteArray(4)
-                                        for (byte in 8 until 12) {
-                                            body[byte - 8] = bytes[byte]
-                                        }
-                                        bLength = bytesToInt(body)
-                                        println("body：$bLength")
+                                    if (bytes.size == SocketPacketConfig.getDefaultHeadPacket().size) {
+                                        //包头
+                                        bLength = bytesToInt(bytes.subList(4, 8).toByteArray())
+                                        println("length：$bLength")
                                     }
                                     if (bLength != -1) {
                                         if (body == bLength) {
                                             val byteArray = bytes.toByteArray()
-                                            val string = String(byteArray, 12, bLength)
+                                            val string = String(byteArray, 8, bLength)
                                             println("收到的信息为：$string")
                                             sendMsgAll(byteArray)
                                             bytes.clear()
@@ -85,18 +69,6 @@ class ServerThread : Runnable {
                                     }
                                 }
                             }
-
-//                            println("server：")
-//                            val inputStream = socket.getInputStream()
-//                            val buffer = ByteArray(1024)
-//                            var len: Int
-//                            do {
-//                                len = inputStream.read(buffer)
-//                                val text = String(buffer, 0, len)
-//                                println("收到的数据为：$text")
-//                                // 在这里群发消息
-//                                sendMsgAll(buffer)
-//                            } while (len != -1)
                         } catch (e: Exception) {
                             println("错误信息为：" + e.message)
                         } finally {

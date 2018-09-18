@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 import java.net.Socket
 import io.realm.RealmChangeListener
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,11 +39,8 @@ class MainActivity : AppCompatActivity() {
             })
             results
         })
-
-
-        SocketPacketConfig.
-
-
+        Arrays.copyOfRange()
+        SocketPacketConfig.setDefaultPacket(true)
         SocketClient.connect()
         sendView.setSendListener(View.OnClickListener {
             //send

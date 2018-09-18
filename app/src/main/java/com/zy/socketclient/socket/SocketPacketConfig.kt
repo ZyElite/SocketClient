@@ -2,22 +2,32 @@ package com.zy.socketclient.socket
 
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
 import com.zy.socketclient.socket.utils.SocketHelp.intToBytes
-import java.util.*
 
 /**
  * 发送消息 信息包处理类
  */
 object SocketPacketConfig {
 
+
+    private val MAXDATALEN = 1024//处理数据缓冲池的长度
+    private val RECEIVEDATALEN = 1024//读取网络数据包最大长度
+    private var siglePackageLen = 0//提取出包的长度
+    private var sequenceLen = 0//当前缓冲区内数据长度
+    private val buffSequencePackage = ByteArray(MAXDATALEN)//数据缓冲池
+
+
+    private const val TAIL_PACKET = "SocketClient"
     private var version: Int = 0
     private var headData: ByteArray? = null
     private var tailData: ByteArray? = null
     private var headPacketLength = 0
-    private var tailpacketLength = 0
+    private var tailPacketLength = 0
     private var heartbeat: ByteArray? = null
-
     private var defaultHeadData: ByteArray? = null
-
+    private var defaultTailData: ByteArray? = null
+    private var addPacket = true
+    private var packetLength = 0
+    private const val TAIL_LEN = 2
     fun setSocketVer(ver: Int): SocketPacketConfig {
         version = ver
         return this
@@ -44,7 +54,7 @@ object SocketPacketConfig {
     }
 
     fun setTailPacketLength(len: Int): SocketPacketConfig {
-        tailpacketLength = len
+        tailPacketLength = len
         return this
     }
 
@@ -59,21 +69,29 @@ object SocketPacketConfig {
     }
 
     /**
-     * 0-4   版本号
-     * 4-8   总长度
-     * 8-12  内容长度
-     * 版本号 + （版本号长度+ 内容长度）+ 内容长度
+     * 设置默认包头包尾
+     * 0-3   版本号
+     * 4-5   0x1 0x2
+     * 版本号 +  固定长度
      */
-    fun setDefaultHeadPacket(bodyLen: Int): SocketPacketConfig {
-        val verLenB = intToBytes(version)
-        val verAndBodyB = intToBytes(verLenB.size + bodyLen)
-        val bodyLenB = intToBytes(bodyLen)
-        defaultHeadData = byteMerger(byteMerger(verLenB, verAndBodyB), bodyLenB)
+    fun setDefaultPacket(boolean: Boolean): SocketPacketConfig {
+        addPacket = boolean
+//        if (boolean) {
+//            val verLenB = intToBytes(version)
+//            val fixed = byteArrayOf(0x1, 0x2)
+//            defaultHeadData = byteMerger(verLenB, fixed)
+//            defaultTailData = TAIL_PACKET.toByteArray(Charsets.UTF_8)
+//            //包头 + 包尾 最小长度
+//            headPacketLength = defaultHeadData!!.size
+//            tailPacketLength = defaultTailData!!.size
+//            packetLength = headPacketLength + tailPacketLength
+//        }
         return this
     }
 
-    fun getDefauleHeadPacket(): ByteArray? {
-        return defaultHeadData
+
+    fun getDefaultHeadPacket(size: Int): ByteArray {
+        return byteMerger((defaultHeadData ?: ByteArray(0)), intToBytes(size))
     }
 
 }

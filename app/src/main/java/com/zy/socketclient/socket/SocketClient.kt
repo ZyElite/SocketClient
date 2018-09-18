@@ -1,12 +1,8 @@
 package com.zy.socketclient.socket
 
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.util.Log
 import com.zy.socketclient.expand.isRun
-import com.zy.socketclient.socket.utils.SocketHelp
+import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
-import com.zy.socketclient.socket.utils.SocketHelp.getHeadData
-import com.zy.socketclient.socket.utils.SocketHelp.intToBytes
 import java.io.IOException
 import java.net.Socket
 import java.util.concurrent.*
@@ -25,8 +21,7 @@ object SocketClient {
     fun queue(): LinkedBlockingQueue<ByteArray> = basket
     @Throws(InterruptedException::class)
     fun send(byteArray: ByteArray) {
-        val first = getHeadData(byteArray.size)
-        val pack = byteMerger(first, byteArray)
+        val pack = byteMerger(getDefaultHeadPacket(byteArray.size), byteArray)
         basket.put(pack)
     }
 
