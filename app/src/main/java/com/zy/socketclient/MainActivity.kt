@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             })
             results
         })
-        Arrays.copyOfRange()
         SocketPacketConfig.setDefaultPacket(true)
         SocketClient.connect()
         sendView.setSendListener(View.OnClickListener {

@@ -4,11 +4,11 @@ import org.intellij.lang.annotations.PrintFormat
 
 
 fun main(args: Array<String>) {
-//    val serverThread = ServerThread()
-//    Thread(serverThread).start()
-    SocketPacketConfig.setSocketVer(1).setDefaultPacket(true)
-    val a = SocketPacketConfig.getDefaultTailPacket()
-    println(a.size)
+    val serverThread = ServerThread()
+    Thread(serverThread).start()
+//    SocketPacketConfig.setSocketVer(1).setDefaultPacket(true)
+//    val a = SocketPacketConfig.getDefaultTailPacket()
+//    println(a.size)
 //    println(Int.MAX_VALUE)
 //    val toBytes = intToBytes(Int.MAX_VALUE)
 ////    println(toBytes)

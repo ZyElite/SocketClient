@@ -27,10 +27,12 @@ object SocketPacketConfig {
     private var addPacket = true
     private var packetLength = 0
     private const val TAIL_LEN = 2
+
     fun setSocketVer(ver: Int): SocketPacketConfig {
         version = ver
         return this
     }
+
 
 
     fun setHeadData(head: ByteArray): SocketPacketConfig {

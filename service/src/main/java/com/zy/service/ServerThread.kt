@@ -43,7 +43,6 @@ class ServerThread : Runnable {
                                 clientList.put(address, socket)
                             }
                             // 定义输入流
-
                             while (true) {
                                 val bytes = mutableListOf<Byte>()
                                 var data: Int = -1
@@ -51,7 +50,7 @@ class ServerThread : Runnable {
                                 var body = 0
                                 while ({ data = socket.getInputStream().read();data }() != -1) {
                                     bytes.add(data.toByte())
-                                    if (bytes.size == SocketPacketConfig.getDefaultHeadPacket().size) {
+                                    if (bytes.size == 8) {
                                         //包头
                                         bLength = bytesToInt(bytes.subList(4, 8).toByteArray())
                                         println("length：$bLength")

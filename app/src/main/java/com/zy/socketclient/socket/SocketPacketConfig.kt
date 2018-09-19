@@ -76,6 +76,9 @@ object SocketPacketConfig {
      */
     fun setDefaultPacket(boolean: Boolean): SocketPacketConfig {
         addPacket = boolean
+        if (boolean) {
+            defaultHeadData = intToBytes(version)
+        }
 //        if (boolean) {
 //            val verLenB = intToBytes(version)
 //            val fixed = byteArrayOf(0x1, 0x2)

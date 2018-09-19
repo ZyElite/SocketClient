@@ -25,14 +25,14 @@
 
     <TextView
         android:id="@+id/rightTvContent"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:gravity="right"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/rightIvAvatar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rightTvDate"
-        tools:text="content" />
+        tools:text="contentcontentcontentcontentcontentcontentcontentcontentcontent" />
 
 </android.support.constraint.ConstraintLayout>
