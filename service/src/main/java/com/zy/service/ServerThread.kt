@@ -114,9 +114,12 @@ class ServerThread : Runnable {
     fun sendMsgAll(msg: ByteArray): Boolean {
         try {
             for (socket in clientList.values) {
-                val outputStream = socket.getOutputStream()
-                outputStream.write(msg)
-                outputStream.flush()
+                if (socket.isConnected && !socket.isOutputShutdown) {
+                    val outputStream = socket.getOutputStream()
+                    outputStream.write(msg)
+                    outputStream.flush()
+                } else clientList.values.remove(socket)
+
             }
             return true
         } catch (e: Exception) {
