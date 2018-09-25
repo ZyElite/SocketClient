@@ -7,12 +7,13 @@ package com.zy.socketclient.socket
 class SendThread : Runnable {
     override fun run() {
         try {
-            while (SocketClient.queue().take().apply {
-                        val outputStream = SocketClient.get()?.getOutputStream()
-                        outputStream?.write(this)
-                        outputStream?.flush()
-                    } != null) {
+            var data: ByteArray? = null
+            while (SocketClient.get()?.isConnected!! && SocketClient.get()?.isOutputShutdown != true && { data = SocketClient.queue().take();data }() != null) {
+                val outputStream = SocketClient.get()?.getOutputStream()
+                outputStream?.write(data)
+                outputStream?.flush()
             }
+            SocketClient.getRes()?.onDisconnected()
         } catch (e: InterruptedException) {
             println("发送线程已经关闭了")
         }

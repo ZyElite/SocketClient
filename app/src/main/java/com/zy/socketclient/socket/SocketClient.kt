@@ -2,6 +2,7 @@ package com.zy.socketclient.socket
 
 import com.zy.socketclient.expand.isRun
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
+import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
 import java.io.IOException
 import java.net.Socket
@@ -17,6 +18,9 @@ object SocketClient {
     private var socketThread: Thread? = null
     private var mEnqueuePacketExecutor: ExecutorService? = null
 
+    private var result: SocketResponse? = null
+
+
     fun get(): Socket? = socket
     fun queue(): LinkedBlockingQueue<ByteArray> = basket
     @Throws(InterruptedException::class)
@@ -25,6 +29,7 @@ object SocketClient {
         basket.put(pack)
     }
 
+    fun getRes(): SocketResponse? = result
 
     /**
      * connect socket
@@ -41,6 +46,7 @@ object SocketClient {
                 sendThread?.start()
                 receiveThread = Thread(ReceiveThread())
                 receiveThread?.start()
+                result?.onConnected()
                 mEnqueuePacketExecutor = Executors.newSingleThreadExecutor { r -> Thread(r, SEND_DATA_THREAD) }
             }
         }
@@ -53,6 +59,13 @@ object SocketClient {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     *注册socket回调
+     */
+    fun registerRes(response: SocketResponse) {
+        result = response
     }
 
 }

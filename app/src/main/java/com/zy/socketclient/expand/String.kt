@@ -5,6 +5,10 @@ import android.util.Log
 
 private const val TAG = "ZyElite"
 
+fun Any.log(str: String) {
+    Log.e(generateTag(), str)
+}
+
 fun String.log() {
     Log.e(generateTag(), this)
 }
