@@ -1,16 +1,11 @@
 package com.zy.socketclient.socket
 
-import com.zy.socketclient.expand.log
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
 import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
 import io.reactivex.Observable
 import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.annotations.NonNull
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
-import io.reactivex.functions.Function
 import java.io.IOException
 import java.net.Socket
 import java.util.concurrent.*

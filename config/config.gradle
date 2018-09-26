@@ -1,4 +1,4 @@
-def SupportVersion = "28.0.0-rc02"
+def SupportVersion = "28.0.0"
 
 def ConstraintLayout = "1.1.3"
 
