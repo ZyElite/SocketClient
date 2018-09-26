@@ -1,15 +1,23 @@
 package com.zy.socketclient.socket
 
-import com.zy.socketclient.expand.isRun
+import com.zy.socketclient.expand.log
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
 import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.annotations.NonNull
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
+import io.reactivex.functions.Function
 import java.io.IOException
 import java.net.Socket
 import java.util.concurrent.*
 
 
 object SocketClient {
+
     private const val SEND_DATA_THREAD = "SendDataThread"
     private var socket: Socket? = null
     private var basket: LinkedBlockingQueue<ByteArray> = LinkedBlockingQueue()
@@ -37,21 +45,56 @@ object SocketClient {
      */
     fun connect() {
         synchronized(this) {
+            close()
             if (socket == null) {
                 socketThread = Thread {
                     createClient()
                 }
-                socket?.isConnected?.apply {
-                    result?.onConnected()
-                    socketThread?.start()
-                    sendThread = Thread(SendThread())
-                    sendThread?.start()
-                    receiveThread = Thread(ReceiveThread())
-                    receiveThread?.start()
-                    mEnqueuePacketExecutor = Executors.newSingleThreadExecutor { r -> Thread(r, SEND_DATA_THREAD) }
-                } ?: result?.onDisconnected()
+                socketThread?.start()
+                createConnect()
             }
+
         }
+    }
+
+    /**
+     * 三秒之内 没有服务器建立连接 定义为连接失败
+     */
+    private fun createConnect() {
+        var disposable: Disposable? = null
+        Observable.interval(0, 1, TimeUnit.SECONDS)
+                .map { socket?.isConnected ?: false }
+                .doOnNext {
+                    if (it) {
+                        result?.onConnected()
+                        sendThread = Thread(SendThread())
+                        sendThread?.start()
+                        receiveThread = Thread(ReceiveThread())
+                        receiveThread?.start()
+                        //mEnqueuePacketExecutor = Executors.newSingleThreadExecutor { r -> Thread(r, SEND_DATA_THREAD) }
+                    }
+                }
+                .take(3)
+                .subscribe(object : Observer<Boolean> {
+                    override fun onNext(t: Boolean) {
+                        if (t) {
+                            result?.onConnected()
+                            disposable?.dispose()
+                        }
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        disposable = d
+                    }
+
+                    override fun onError(e: Throwable) {
+
+                    }
+
+                    override fun onComplete() {
+                        result?.onDisconnected()
+                    }
+                })
     }
 
     /**
@@ -68,6 +111,7 @@ object SocketClient {
         try {
             socket = Socket("192.168.98.110", 10010)
             socket?.keepAlive = true
+            socket
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -81,3 +125,5 @@ object SocketClient {
     }
 
 }
+
+
