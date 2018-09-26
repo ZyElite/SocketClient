@@ -1,7 +1,5 @@
 package com.zy.socketclient.socket
 
-import com.zy.socketclient.expand.log
-
 
 /**
  * @des SendThread

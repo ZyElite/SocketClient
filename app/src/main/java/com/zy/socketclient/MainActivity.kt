@@ -29,11 +29,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val adapter = ChatAdapter()
         recycle.adapter = adapter
-//        val results = Realm.getDefaultInstance().where(Message::class.java).findAllAsync()
-//        results.addChangeListener(RealmChangeListener<RealmResults<Message>> {
-////            adapter.replace(it)
-////            recycle.scrollToPosition(it.size - 1)
-//        })
         adapter.replace(query<Message> {
             val results = it.where(Message::class.java).findAllAsync()
             results.addChangeListener(RealmChangeListener<RealmResults<Message>> {
