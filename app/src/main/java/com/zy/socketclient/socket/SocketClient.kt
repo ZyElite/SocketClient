@@ -17,12 +17,13 @@ object SocketClient {
     private var receiveThread: Thread? = null
     private var socketThread: Thread? = null
     private var mEnqueuePacketExecutor: ExecutorService? = null
-
     private var result: SocketResponse? = null
 
 
     fun get(): Socket? = socket
+
     fun queue(): LinkedBlockingQueue<ByteArray> = basket
+
     @Throws(InterruptedException::class)
     fun send(byteArray: ByteArray) {
         val pack = byteMerger(getDefaultHeadPacket(byteArray.size), byteArray)
@@ -37,19 +38,30 @@ object SocketClient {
     fun connect() {
         synchronized(this) {
             if (socket == null) {
-                isRun()
                 socketThread = Thread {
                     createClient()
                 }
-                socketThread?.start()
-                sendThread = Thread(SendThread())
-                sendThread?.start()
-                receiveThread = Thread(ReceiveThread())
-                receiveThread?.start()
-                result?.onConnected()
-                mEnqueuePacketExecutor = Executors.newSingleThreadExecutor { r -> Thread(r, SEND_DATA_THREAD) }
+                socket?.isConnected?.apply {
+                    result?.onConnected()
+                    socketThread?.start()
+                    sendThread = Thread(SendThread())
+                    sendThread?.start()
+                    receiveThread = Thread(ReceiveThread())
+                    receiveThread?.start()
+                    mEnqueuePacketExecutor = Executors.newSingleThreadExecutor { r -> Thread(r, SEND_DATA_THREAD) }
+                } ?: result?.onDisconnected()
             }
         }
+    }
+
+    /**
+     * close socket
+     */
+    fun close() {
+        socketThread?.interrupt()
+        sendThread?.interrupt()
+        receiveThread?.interrupt()
+        socket = null
     }
 
     private fun createClient() {
