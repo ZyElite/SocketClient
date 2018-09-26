@@ -23,13 +23,15 @@ class ReceiveThread : Runnable {
                     if (bytes.size == 8) {
                         bLength = bytesToInt(bytes.subList(4, 8).toByteArray())
                     }
-                    if (bLength != -1 && body == bLength) {
-                        val string = String(bytes.toByteArray(), 8, bLength)
-                        SocketClient.getRes()?.onResponse(string)
-                        bytes.clear()
-                        break
+                    if (bLength != -1) {
+                        if (body == bLength) {
+                            val string = String(bytes.toByteArray(), 8, bLength)
+                            SocketClient.getRes()?.onResponse(string)
+                            bytes.clear()
+                            break
+                        }
+                        body++
                     }
-                    body++
                 }
             }
             SocketClient.getRes()?.onDisconnected()
