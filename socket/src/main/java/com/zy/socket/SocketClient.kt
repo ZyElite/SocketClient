@@ -52,6 +52,12 @@ object SocketClient {
         }
     }
 
+
+    private fun sendHeartbeat() {
+//        Observable.interval(0, SocketPacketConfig.get)
+    }
+
+
     /**
      * 三秒之内 没有服务器建立连接 定义为连接失败
      */

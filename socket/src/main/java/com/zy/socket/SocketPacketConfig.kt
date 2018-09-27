@@ -26,8 +26,24 @@ object SocketPacketConfig {
     private var defaultHeadData: ByteArray? = null
     private var defaultTailData: ByteArray? = null
     private var addPacket = true
+    private var sendHeartbeat = false
+
+
+
+    /**
+     * 默认30s
+     */
+    private var socketTimeOut = 30
+
     private var packetLength = 0
     private const val TAIL_LEN = 2
+
+
+    fun setSendHeartBeat(isSend: Boolean) {
+        sendHeartbeat = isSend
+    }
+
+
     fun setSocketVer(ver: Int): SocketPacketConfig {
         version = ver
         return this
@@ -68,6 +84,7 @@ object SocketPacketConfig {
         return heartbeat
     }
 
+
     /**
      * 设置默认包头包尾
      * 0-3   版本号
@@ -96,5 +113,6 @@ object SocketPacketConfig {
     fun getDefaultHeadPacket(size: Int): ByteArray {
         return byteMerger((defaultHeadData ?: ByteArray(0)), intToBytes(size))
     }
+
 
 }
