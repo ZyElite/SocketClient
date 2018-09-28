@@ -1,6 +1,7 @@
 package com.zy.socketclient.socket
 
 import com.zy.socket.callback.SocketConfig
+import com.zy.socket.imp.SocketConfigImp
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
 import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
@@ -8,11 +9,12 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import java.io.IOException
+import java.net.InetSocketAddress
 import java.net.Socket
 import java.util.concurrent.*
 
 
-object SocketClient : SocketConfig {
+object SocketClient {
 
     private const val SEND_DATA_THREAD = "SendDataThread"
     private var socket: Socket? = null
@@ -81,6 +83,8 @@ object SocketClient : SocketConfig {
                     override fun onNext(t: Boolean) {
                         if (t) {
                             result?.onConnected()
+                            //发送心跳
+                            SocketConfigImp.Heartbeat()
                             disposable?.dispose()
                         }
                     }
@@ -111,9 +115,10 @@ object SocketClient : SocketConfig {
 
     private fun createClient() {
         try {
-            socket = Socket("192.168.98.110", 10010)
+            socket = Socket()
+            socket?.connect(InetSocketAddress("192.168.98.110", 10010), SocketPacketConfig.getTimeOut().toInt() * 1000)
             socket?.keepAlive = true
-            socket
+          //  socket?.soTimeout = SocketPacketConfig.getTimeOut().toInt() * 1000
         } catch (e: IOException) {
             e.printStackTrace()
         }

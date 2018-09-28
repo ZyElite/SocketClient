@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
             results
         })
         SocketPacketConfig.setDefaultPacket(true)
+        SocketPacketConfig.setSendHeartBeat(true)
         SocketClient.registerRes(object : SocketResponse {
             override fun onConnected() {
                 log("socket 连接已连接")

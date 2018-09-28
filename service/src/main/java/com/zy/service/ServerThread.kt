@@ -52,10 +52,10 @@ class ServerThread : Runnable {
                                     bytes.add(data.toByte())
                                     if (bytes.size == 8) {
                                         //包头
-                                        bLength = bytesToInt(bytes.subList(4, 8).toByteArray())
-                                        println("length：$bLength")
+                                        val array = bytes.subList(4, 8).toByteArray()
+                                        bLength = bytesToInt(array)
                                     }
-                                    if (bLength != -1) {
+                                    if (bLength > 0) {
                                         if (body == bLength) {
                                             val byteArray = bytes.toByteArray()
                                             val string = String(byteArray, 8, bLength)
@@ -65,6 +65,11 @@ class ServerThread : Runnable {
                                             break
                                         }
                                         body++
+                                    } else if (bLength == 0) {
+                                        //收到心跳包
+                                        println("收到的心跳包")
+                                        sendMsgAll(bytes.toByteArray())
+                                        break
                                     }
                                 }
                             }
@@ -85,13 +90,13 @@ class ServerThread : Runnable {
 
     }
 
-    private fun intToBytes(value: Int): ByteArray = byteArrayOf(
+    fun intToBytes(value: Int): ByteArray = byteArrayOf(
             (value shr 24 and 0xFF).toByte(),
             (value shr 16 and 0xFF).toByte(),
             (value shr 8 and 0xFF).toByte(),
             (value and 0xFF).toByte())
 
-    private fun bytesToInt(bytes: ByteArray): Int = (
+    fun bytesToInt(bytes: ByteArray): Int = (
             bytes[3].toInt() and 0xFF) or
             ((bytes[2].toInt() and 0xFF) shl 8) or
             ((bytes[1].toInt() and 0xFF) shl 16) or

@@ -20,7 +20,7 @@ class ReceiveThread : Runnable {
                     if (bytes.size == 8) {
                         bLength = bytesToInt(bytes.subList(4, 8).toByteArray())
                     }
-                    if (bLength != -1) {
+                    if (bLength > 0) {
                         if (body == bLength) {
                             val string = String(bytes.toByteArray(), 8, bLength)
                             SocketClient.getRes()?.onResponse(string)
@@ -28,6 +28,9 @@ class ReceiveThread : Runnable {
                             break
                         }
                         body++
+                    } else if (bLength == 0) {
+                        SocketClient.getRes()?.onResponse("收到心跳包")
+                        break
                     }
                 }
             }

@@ -6,6 +6,7 @@ import com.zy.socketclient.socket.SocketClient
 import com.zy.socketclient.socket.SocketPacketConfig
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
+import io.reactivex.functions.Predicate
 import java.util.concurrent.TimeUnit
 
 /**
@@ -14,13 +15,17 @@ import java.util.concurrent.TimeUnit
 object SocketConfigImp : SocketConfig {
 
     /**
-     *每隔30s发送一次心跳
+     * 默认每隔30s发送一次心跳
+     * 请先设置 允许是否发送心跳包 默认不允许
+     * {@line com.zy.socketclient.socket.SocketPacketConfig#isSendHeartBeat()}
      */
+    @SuppressLint("CheckResult")
     override fun Heartbeat() {
         Observable.interval(0, SocketPacketConfig.getTimeOut(), TimeUnit.SECONDS)
+                .filter { SocketPacketConfig.isSendHeartBeat() }
                 .subscribe {
                     //发送心跳
-                    SocketClient.send(SocketPacketConfig.getHeartBeat() ?: ByteArray(0))
+                    SocketClient.queue().put(SocketPacketConfig.getDefaultHeadPacket(0))
                 }
     }
 }
