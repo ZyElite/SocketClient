@@ -1,5 +1,6 @@
 package com.zy.socketclient.socket
 
+import com.zy.socket.callback.SocketConfig
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
 import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
@@ -11,7 +12,7 @@ import java.net.Socket
 import java.util.concurrent.*
 
 
-object SocketClient {
+object SocketClient : SocketConfig {
 
     private const val SEND_DATA_THREAD = "SendDataThread"
     private var socket: Socket? = null

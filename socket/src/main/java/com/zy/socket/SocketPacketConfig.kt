@@ -26,22 +26,40 @@ object SocketPacketConfig {
     private var defaultHeadData: ByteArray? = null
     private var defaultTailData: ByteArray? = null
     private var addPacket = true
+
     private var sendHeartbeat = false
 
 
-
     /**
-     * 默认30s
+     * 默认超时时间30s
      */
-    private var socketTimeOut = 30
+    private var socketTimeOut = 30L
 
     private var packetLength = 0
     private const val TAIL_LEN = 2
 
 
+    /**
+     * 设置是否发送心跳包
+     * 默认是 false
+     */
     fun setSendHeartBeat(isSend: Boolean) {
         sendHeartbeat = isSend
     }
+
+    /**
+     *设置超时时间
+     * 默认时间是30s
+     */
+    fun setTimeOut(time: Long) {
+        socketTimeOut = time
+    }
+
+
+    /**
+     *获取socket超时时间
+     */
+    fun getTimeOut(): Long = socketTimeOut
 
 
     fun setSocketVer(ver: Int): SocketPacketConfig {
