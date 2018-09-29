@@ -1,14 +1,14 @@
-##SocketClient
+## SocketClient
 >IM项目封装 包含服务器(Kotlin)
 
-##Import
+## Import
 >待补
 
-##Updates
+## Updates
 - 1.0.0 
 
  第一版封装
-##Usage
+## Usage
 		//发送是否加入包头
 		SocketPacketConfig.setDefaultPacket(true)
 		//是否发送心跳包
