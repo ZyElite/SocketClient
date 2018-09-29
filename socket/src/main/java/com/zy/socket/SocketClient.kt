@@ -1,5 +1,6 @@
 package com.zy.socketclient.socket
 
+import com.zy.socket.imp.SocketConfigImp
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
 import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
@@ -68,7 +69,6 @@ object SocketClient {
                 .map { socket?.isConnected ?: false }
                 .doOnNext {
                     if (it) {
-                        result?.onConnected()
                         sendThread = Thread(SendThread())
                         sendThread?.start()
                         receiveThread = Thread(ReceiveThread())
@@ -82,7 +82,7 @@ object SocketClient {
                         if (t) {
                             result?.onConnected()
                             //发送心跳
-//                            SocketConfigImp.Heartbeat()
+                            SocketConfigImp.Heartbeat()
                             disposable?.dispose()
                         }
                     }
