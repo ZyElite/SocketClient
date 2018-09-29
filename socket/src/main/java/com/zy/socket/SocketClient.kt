@@ -1,7 +1,5 @@
 package com.zy.socketclient.socket
 
-import com.zy.socket.callback.SocketConfig
-import com.zy.socket.imp.SocketConfigImp
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
 import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
@@ -84,7 +82,7 @@ object SocketClient {
                         if (t) {
                             result?.onConnected()
                             //发送心跳
-                            SocketConfigImp.Heartbeat()
+//                            SocketConfigImp.Heartbeat()
                             disposable?.dispose()
                         }
                     }
@@ -98,7 +96,7 @@ object SocketClient {
                     }
 
                     override fun onComplete() {
-                        result?.onDisconnected()
+                        result?.onDisconnected("Socket Read timed out")
                     }
                 })
     }
@@ -107,10 +105,13 @@ object SocketClient {
      * close socket
      */
     fun close() {
+        socket?.shutdownInput()
+        socket?.shutdownOutput()
+        socket?.close()
+        socket = null
         socketThread?.interrupt()
         sendThread?.interrupt()
         receiveThread?.interrupt()
-        socket = null
     }
 
     private fun createClient() {
@@ -118,7 +119,7 @@ object SocketClient {
             socket = Socket()
             socket?.connect(InetSocketAddress("192.168.98.110", 10010), SocketPacketConfig.getTimeOut().toInt() * 1000)
             socket?.keepAlive = true
-          //  socket?.soTimeout = SocketPacketConfig.getTimeOut().toInt() * 1000
+            socket?.soTimeout = (SocketPacketConfig.getTimeOut().toInt() * 1000)
         } catch (e: IOException) {
             e.printStackTrace()
         }

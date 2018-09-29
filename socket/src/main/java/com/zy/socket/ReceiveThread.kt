@@ -2,6 +2,8 @@ package com.zy.socketclient.socket
 
 import android.util.Log
 import com.zy.socketclient.socket.utils.SocketHelp.bytesToInt
+import java.net.SocketTimeoutException
+import kotlin.math.log
 
 /**
  * @des ReceiveThread
@@ -34,9 +36,15 @@ class ReceiveThread : Runnable {
                     }
                 }
             }
-            SocketClient.getRes()?.onDisconnected()
         } catch (e: InterruptedException) {
-            println("接收线程已经关闭了")
+            SocketClient.getRes()?.onDisconnected("Socket ReceiveThread Interrupted")
+        } catch (e: SocketTimeoutException) {
+            //Socket  Read timed out
+            SocketClient.getRes()?.onDisconnected("Socket Read timed out")
+        } finally {
+            //close all socket
+            Log.e("ReceiveThread", "finally")
+            SocketClient.close()
         }
     }
 }

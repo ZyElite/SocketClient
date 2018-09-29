@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity() {
                 log("socket 连接已连接")
             }
 
-            override fun onDisconnected() {
-                log("socket 连接关闭了")
+            override fun onDisconnected(str: String) {
+                log(str)
             }
 
             override fun onResponse(str: String) {

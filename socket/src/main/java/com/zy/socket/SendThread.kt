@@ -13,9 +13,9 @@ class SendThread : Runnable {
                 outputStream?.write(data)
                 outputStream?.flush()
             }
-            SocketClient.getRes()?.onDisconnected()
+
         } catch (e: InterruptedException) {
-            println("发送线程已经关闭了")
+            SocketClient.getRes()?.onDisconnected("Socket SendThread Interrupted")
         }
     }
 
