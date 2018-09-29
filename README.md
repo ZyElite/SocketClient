@@ -1,5 +1,5 @@
 ## SocketClient
->IM项目封装 包含服务器(Kotlin)
+>IM项目封装 包含服务器(Kotlin) 结合realm 数据库 优雅实现即时通讯 并及时展示到界面上
 
 ## Import
 >待补
@@ -10,6 +10,7 @@
  第一版封装
 ## Usage
 
+### 客户端配置
 	SocketPacketConfig.setDefaultPacket(true)//发送是否加入包头
                 .setSendHeartBeat(true)//是否发送心跳包
                 .setSocketAddress("192.168.98.110", 10010, 10000)//设置套接字地址
@@ -29,7 +30,8 @@
         })
         //连接socket
 	SocketClient.connect()
-	
+### 启动服务器端 service
+> 就可以聊天了
 ## License
 	Copyright (c) 2016-present, RxJava Contributors.
 	
