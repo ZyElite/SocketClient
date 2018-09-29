@@ -1,19 +1,19 @@
-##SocketClient
+## SocketClient
 >IM项目封装 包含服务器(Kotlin)
 
-##Import
+## Import
 >待补
 
-##Updates
+## Updates
 - 1.0.0 
 
  第一版封装
-##Usage
-		//发送是否加入包头
-		SocketPacketConfig.setDefaultPacket(true)
-		//是否发送心跳包
-        SocketPacketConfig.setSendHeartBeat(true)
-		//注册 socket 消息监听 运行在子线程
+## Usage
+
+	SocketPacketConfig.setDefaultPacket(true)//发送是否加入包头
+                .setSendHeartBeat(true)//是否发送心跳包
+                .setSocketAddress("192.168.98.110", 10010, 10000)//设置套接字地址
+	 //注册 socket 消息监听 运行在子线程
         SocketClient.registerRes(object : SocketResponse {
             override fun onConnected() {
                //连接成功
@@ -28,8 +28,9 @@
             }
         })
         //连接socket
-        SocketClient.connect()
-License
+	SocketClient.connect()
+	
+## License
 	Copyright (c) 2016-present, RxJava Contributors.
 	
 	Licensed under the Apache License, Version 2.0 (the "License");
