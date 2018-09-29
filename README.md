@@ -10,10 +10,9 @@
  第一版封装
 ## Usage
 
-	//发送是否加入包头
-	SocketPacketConfig.setDefaultPacket(true)
-	//是否发送心跳包
-	SocketPacketConfig.setSendHeartBeat(true)
+	SocketPacketConfig.setDefaultPacket(true)//发送是否加入包头
+                .setSendHeartBeat(true)//是否发送心跳包
+                .setSocketAddress("192.168.98.110", 10010, 10000)//设置套接字地址
 	 //注册 socket 消息监听 运行在子线程
         SocketClient.registerRes(object : SocketResponse {
             override fun onConnected() {
@@ -29,7 +28,7 @@
             }
         })
         //连接socket
-        SocketClient.connect()
+	SocketClient.connect()
 	
 ## License
 	Copyright (c) 2016-present, RxJava Contributors.
