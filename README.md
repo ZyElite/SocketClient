@@ -1,5 +1,5 @@
 ## SocketClient
->IM项目封装 包含服务器(Kotlin) 结合realm 数据库 优雅实现即时通讯 并及时展示到界面上
+>IM项目封装 包含服务器(Kotlin) 结合realm（响应式） 数据库 优雅实现即时通讯 并及时展示到界面上
 
 ## Import
 >待补
