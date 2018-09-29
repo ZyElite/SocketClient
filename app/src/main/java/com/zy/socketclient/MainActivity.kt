@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity() {
             results
         })
         SocketPacketConfig.setDefaultPacket(true)
-        SocketPacketConfig.setSendHeartBeat(true)
+                .setSendHeartBeat(true)
+                .setSocketAddress("192.168.98.110", 10010, 10000)
         SocketClient.registerRes(object : SocketResponse {
             override fun onConnected() {
                 log("socket 连接已连接")

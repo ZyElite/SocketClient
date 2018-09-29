@@ -1,6 +1,7 @@
 package com.zy.socketclient.socket
 
 import com.zy.socket.imp.SocketConfigImp
+import com.zy.socketclient.socket.SocketPacketConfig.getConnTimeOut
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
 import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
@@ -117,7 +118,7 @@ object SocketClient {
     private fun createClient() {
         try {
             socket = Socket()
-            socket?.connect(InetSocketAddress("192.168.98.110", 10010), SocketPacketConfig.getTimeOut().toInt() * 1000)
+            socket?.connect(InetSocketAddress(SocketPacketConfig.getAddress(), SocketPacketConfig.getPort()), SocketPacketConfig.getConnTimeOut())
             socket?.keepAlive = true
             socket?.soTimeout = (SocketPacketConfig.getTimeOut().toInt() * 1000)
         } catch (e: IOException) {

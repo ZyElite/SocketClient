@@ -35,6 +35,10 @@ object SocketPacketConfig {
      */
     private var socketTimeOut = 30L
 
+    private var address: String? = null
+    private var port: Int = 0
+    private var connTimeOut: Int = 0
+
     private var packetLength = 0
     private const val TAIL_LEN = 2
 
@@ -43,8 +47,9 @@ object SocketPacketConfig {
      * 设置是否发送心跳包
      * 默认是 false
      */
-    fun setSendHeartBeat(isSend: Boolean) {
+    fun setSendHeartBeat(isSend: Boolean): SocketPacketConfig {
         sendHeartbeat = isSend
+        return this
     }
 
     /**
@@ -99,6 +104,39 @@ object SocketPacketConfig {
     fun getDefaultHeadPacket(size: Int): ByteArray {
         return byteMerger(defaultHeadData ?: ByteArray(0), intToBytes(size))
     }
+
+
+    /**
+     *设置套接字地址
+     * @param address ip
+     * @param port 端口号
+     */
+    fun setSocketAddress(address: String, port: Int): SocketPacketConfig {
+        this.address = address
+        this.port = port
+        return this
+
+    }
+
+    /**
+     *设置套接字地址
+     * @param address ip
+     * @param port 端口号
+     * @param timeout 毫秒
+     */
+
+    fun setSocketAddress(address: String, port: Int, timeout: Int): SocketPacketConfig {
+        this.address = address
+        this.port = port
+        this.connTimeOut = timeout
+        return this
+    }
+
+    fun getAddress(): String? = address
+
+    fun getPort(): Int = port
+
+    fun getConnTimeOut(): Int = connTimeOut
 
 
 //    fun setHeadData(head: ByteArray): SocketPacketConfig {
