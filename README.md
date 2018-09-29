@@ -9,10 +9,11 @@
 
  第一版封装
 ## Usage
-	 //发送是否加入包头
+
+	//发送是否加入包头
 	SocketPacketConfig.setDefaultPacket(true)
-	 //是否发送心跳包
-        SocketPacketConfig.setSendHeartBeat(true)
+	//是否发送心跳包
+	SocketPacketConfig.setSendHeartBeat(true)
 	 //注册 socket 消息监听 运行在子线程
         SocketClient.registerRes(object : SocketResponse {
             override fun onConnected() {
