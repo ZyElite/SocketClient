@@ -161,12 +161,12 @@ object SocketPacketConfig {
      *不填加默认包头  需要自定义接收 否则无法解析数据
      */
 
-    fun registeCustomizeReceive(customizeReceive: SocketCustomizeReceive): SocketPacketConfig {
+    fun setCustomizeReceive(customizeReceive: SocketCustomizeReceive): SocketPacketConfig {
         this.customReceive = customReceive
         return this
     }
 
-    fun getCustomizeReceiuve() = customReceive
+    fun getCustomizeReceive() = customReceive
 
 //    fun setHeadData(head: ByteArray): SocketPacketConfig {
 //        if (headData == null) {

@@ -11,6 +11,7 @@ import com.zy.socketclient.model.Message
 import com.zy.socketclient.socket.SocketClient
 import com.zy.socketclient.socket.SocketPacketConfig
 import com.zy.socketclient.socket.callback.SocketResponse
+import com.zy.socketclient.socket.utils.SocketHelp
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
 import io.realm.RealmChangeListener
@@ -34,6 +35,16 @@ class MainActivity : AppCompatActivity() {
         SocketPacketConfig.setDefaultPacket(true)
                 .setSendHeartBeat(true)
                 .setSocketAddress("192.168.98.110", 10010, 10000)
+                .setCustomizeReceive(object : SocketCustomizeReceive {
+                    override fun headLength(): Int {
+                        return 8
+                    }
+
+                    override fun bodyLength(head: ByteArray): Int {
+                        return SocketHelp.bytesToInt(head)
+                    }
+
+                })
 
         SocketClient.registerRes(object : SocketResponse {
             override fun onConnected() {

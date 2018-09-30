@@ -4,7 +4,6 @@ import android.util.Log
 import com.zy.socketclient.expand.log
 import com.zy.socketclient.socket.utils.SocketHelp.bytesToInt
 import java.net.SocketTimeoutException
-import kotlin.math.log
 
 /**
  * @des ReceiveThread
@@ -20,7 +19,7 @@ class ReceiveThread : Runnable {
                 var body = 0
                 var headLength = 8
                 if (!SocketPacketConfig.isAddDefaultHead()) {
-                    headLength = SocketPacketConfig.getCustomizeReceiuve()?.headLength() ?: 0
+                    headLength = SocketPacketConfig.getCustomizeReceive()?.headLength() ?: 0
                 }
                 while ({ data = SocketClient.get()?.getInputStream()?.read() ?: -1;data }() != -1) {
                     bytes.add(data.toByte())
@@ -28,7 +27,7 @@ class ReceiveThread : Runnable {
                         bLength = if (SocketPacketConfig.isAddDefaultHead()) {
                             bytesToInt(bytes.subList(4, 8).toByteArray())
                         } else {
-                            SocketPacketConfig.getCustomizeReceiuve()?.bodyLength(bytes.toByteArray())
+                            SocketPacketConfig.getCustomizeReceive()?.bodyLength(bytes.toByteArray())
                                     ?: 0
                         }
                     }
