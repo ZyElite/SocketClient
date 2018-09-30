@@ -7,7 +7,7 @@ interface SocketCustomizeReceive {
     fun headLength(): Int
 
     /**
-     * 包体长度
+     * 返回包体长度
      */
     fun bodyLength(head: ByteArray): Int
 

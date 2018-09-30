@@ -17,7 +17,7 @@ object SocketConfigImp : SocketConfig {
     /**
      * 默认每隔30s发送一次心跳
      * 请先设置 允许是否发送心跳包 默认不允许
-     * {@line com.zy.socketclient.socket.SocketPacketConfig#isSendHeartBeat()}
+     * {@link com.zy.socketclient.socket.SocketPacketConfig}
      */
     @SuppressLint("CheckResult")
     override fun Heartbeat() {
