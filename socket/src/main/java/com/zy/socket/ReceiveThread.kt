@@ -1,6 +1,7 @@
 package com.zy.socketclient.socket
 
 import android.util.Log
+import com.zy.socketclient.expand.log
 import com.zy.socketclient.socket.utils.SocketHelp.bytesToInt
 import java.net.SocketTimeoutException
 import kotlin.math.log
@@ -17,21 +18,30 @@ class ReceiveThread : Runnable {
                 var data: Int = -1
                 var bLength: Int = -1
                 var body = 0
+                var headLength = 8
+                if (!SocketPacketConfig.isAddDefaultHead()) {
+                    headLength = SocketPacketConfig.getCustomizeReceiuve()?.headLength() ?: 0
+                }
                 while ({ data = SocketClient.get()?.getInputStream()?.read() ?: -1;data }() != -1) {
                     bytes.add(data.toByte())
-                    if (bytes.size == 8) {
-                        bLength = bytesToInt(bytes.subList(4, 8).toByteArray())
+                    if (bytes.size == headLength) {
+                        bLength = if (SocketPacketConfig.isAddDefaultHead()) {
+                            bytesToInt(bytes.subList(4, 8).toByteArray())
+                        } else {
+                            SocketPacketConfig.getCustomizeReceiuve()?.bodyLength(bytes.toByteArray())
+                                    ?: 0
+                        }
                     }
                     if (bLength > 0) {
                         if (body == bLength) {
-                            val string = String(bytes.toByteArray(), 8, bLength)
+                            val string = String(bytes.toByteArray(), headLength, bLength)
                             SocketClient.getRes()?.onResponse(string)
                             bytes.clear()
                             break
                         }
                         body++
                     } else if (bLength == 0) {
-                        SocketClient.getRes()?.onResponse("收到心跳包")
+                        log("接收到心跳包")
                         break
                     }
                 }

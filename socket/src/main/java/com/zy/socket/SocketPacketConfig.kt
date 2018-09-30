@@ -1,5 +1,6 @@
 package com.zy.socketclient.socket
 
+import com.zy.socket.callback.SocketCustomizeReceive
 import com.zy.socketclient.socket.utils.SocketHelp.byteMerger
 import com.zy.socketclient.socket.utils.SocketHelp.intToBytes
 
@@ -25,10 +26,12 @@ object SocketPacketConfig {
     private var heartbeat: ByteArray? = ByteArray(10)
     private var defaultHeadData: ByteArray? = null
     private var defaultTailData: ByteArray? = null
-    private var addPacket = true
+
+    private var addPacket = false
 
     private var sendHeartbeat = false
 
+    private var customReceive: SocketCustomizeReceive? = null
 
     /**
      * 默认超时时间30s
@@ -82,7 +85,7 @@ object SocketPacketConfig {
 
 
     /**
-     * 设置默认包头包尾
+     * 设置默认包头
      * 0-3   版本号
      * 4-7   数据长度
      * 版本号 +  固定长度
@@ -93,9 +96,9 @@ object SocketPacketConfig {
             defaultHeadData = intToBytes(version)
             headPacketLength = defaultHeadData?.size!!
         }
-
         return this
     }
+
 
     /**
      * 发送的时候
@@ -139,6 +142,32 @@ object SocketPacketConfig {
     fun getConnTimeOut(): Int = connTimeOut
 
 
+    /**
+     * 是否添加默認包頭
+     */
+    fun isAddDefaultHead(): Boolean = addPacket
+
+    /**
+     * 设置包尾 如果不加包头的话 需要添加包尾 来确认消息结尾
+     */
+    fun setTailData(tail: ByteArray): SocketPacketConfig {
+        if (tailData == null) {
+            tailData = tail
+        }
+        return this
+    }
+
+    /**
+     *不填加默认包头  需要自定义接收 否则无法解析数据
+     */
+
+    fun registeCustomizeReceive(customizeReceive: SocketCustomizeReceive): SocketPacketConfig {
+        this.customReceive = customReceive
+        return this
+    }
+
+    fun getCustomizeReceiuve() = customReceive
+
 //    fun setHeadData(head: ByteArray): SocketPacketConfig {
 //        if (headData == null) {
 //            headData = head
@@ -146,12 +175,7 @@ object SocketPacketConfig {
 //        return this
 //    }
 //
-//    fun setTailData(tail: ByteArray): SocketPacketConfig {
-//        if (tailData == null) {
-//            tailData = tail
-//        }
-//        return this
-//    }
+
 
 //    fun setHeadPacketLength(len: Int): SocketPacketConfig {
 //        headPacketLength = len

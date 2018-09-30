@@ -11,7 +11,7 @@
 ## Usage
 
 ### 客户端配置
-	SocketPacketConfig.setDefaultPacket(true)//发送是否加入包头
+	SocketPacketConfig.setDefaultPacket(true)//发送是否加入默认包头 分包处理
                 .setSendHeartBeat(true)//是否发送心跳包
                 .setSocketAddress("192.168.98.110", 10010, 10000)//设置套接字地址
 	 //注册 socket 消息监听 运行在子线程

@@ -3,6 +3,7 @@ package com.zy.socketclient
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.zy.socket.callback.SocketCustomizeReceive
 import com.zy.socketclient.expand.log
 import com.zy.socketclient.expand.query
 import com.zy.socketclient.expand.save
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         SocketPacketConfig.setDefaultPacket(true)
                 .setSendHeartBeat(true)
                 .setSocketAddress("192.168.98.110", 10010, 10000)
+
         SocketClient.registerRes(object : SocketResponse {
             override fun onConnected() {
                 log("socket 连接已连接")

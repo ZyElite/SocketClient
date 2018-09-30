@@ -1,5 +1,6 @@
 package com.zy.socketclient.socket
 
+import com.zy.socket.callback.SocketCustomizeReceive
 import com.zy.socket.imp.SocketConfigImp
 import com.zy.socketclient.socket.SocketPacketConfig.getConnTimeOut
 import com.zy.socketclient.socket.SocketPacketConfig.getDefaultHeadPacket
@@ -32,11 +33,16 @@ object SocketClient {
 
     @Throws(InterruptedException::class)
     fun send(byteArray: ByteArray) {
-        val pack = byteMerger(getDefaultHeadPacket(byteArray.size), byteArray)
-        basket.put(pack)
+        if (SocketPacketConfig.isAddDefaultHead()) {
+            val pack = byteMerger(getDefaultHeadPacket(byteArray.size), byteArray)
+            basket.put(pack)
+        } else {
+            basket.put(byteArray)
+        }
     }
 
     fun getRes(): SocketResponse? = result
+
 
     /**
      * connect socket
@@ -132,6 +138,8 @@ object SocketClient {
     fun registerRes(response: SocketResponse) {
         result = response
     }
+
+
 
 }
 
