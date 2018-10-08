@@ -10,6 +10,7 @@ import com.zy.socketclient.expand.save
 import com.zy.socketclient.model.Message
 import com.zy.socketclient.socket.SocketClient
 import com.zy.socketclient.socket.SocketPacketConfig
+import com.zy.socketclient.socket.SocketPacketConfig.setSocketAddress
 import com.zy.socketclient.socket.callback.SocketResponse
 import com.zy.socketclient.socket.utils.SocketHelp
 import io.realm.RealmResults
@@ -33,14 +34,19 @@ class MainActivity : AppCompatActivity() {
             results
         })
         SocketPacketConfig.setDefaultPacket(true)
+                //是否发送心跳 默人false
                 .setSendHeartBeat(true)
+                //设置套接字地址
                 .setSocketAddress("192.168.98.110", 10010, 10000)
+                //设置自定义接收解析方式
                 .setCustomizeReceive(object : SocketCustomizeReceive {
                     override fun headLength(): Int {
+                        //返回包协议头的长度
                         return 8
                     }
 
                     override fun bodyLength(head: ByteArray): Int {
+                        //解析包头返回包体的长度
                         return SocketHelp.bytesToInt(head)
                     }
 
