@@ -20,7 +20,7 @@ object SocketConfigImp : SocketConfig {
      * {@link com.zy.socketclient.socket.SocketPacketConfig}
      */
     @SuppressLint("CheckResult")
-    override fun Heartbeat() {
+    override fun heartBeat() {
         Observable.interval(0, SocketPacketConfig.getTimeOut(), TimeUnit.SECONDS)
                 .filter { SocketPacketConfig.isSendHeartBeat() }
                 .subscribe {

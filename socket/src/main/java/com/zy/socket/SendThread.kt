@@ -13,7 +13,6 @@ class SendThread : Runnable {
                 outputStream?.write(data)
                 outputStream?.flush()
             }
-
         } catch (e: InterruptedException) {
             SocketClient.getRes()?.onDisconnected("Socket SendThread Interrupted")
         }

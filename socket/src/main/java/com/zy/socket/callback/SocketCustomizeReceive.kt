@@ -1,5 +1,6 @@
 package com.zy.socket.callback
 
+
 interface SocketCustomizeReceive {
     /**
      * 包头长度

@@ -1,1 +1,1 @@
-include ':app', ':service', ':socket'
+include ':app', ':service', ':socket','aio-core'
