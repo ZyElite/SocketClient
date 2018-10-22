@@ -1,14 +1,12 @@
 package com.zy.service
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import java.nio.ByteBuffer
 import java.nio.channels.AsynchronousServerSocketChannel
 import java.nio.channels.AsynchronousSocketChannel
 
-/**
- * 附件
- */
-class Attachment<T> {
+class Conversation<T> {
+//    private var server: AsynchronousServerSocketChannel? = null
+
     /**
      * 客户端  异步套接字通道
      */
@@ -38,4 +36,5 @@ class Attachment<T> {
     }
 
     fun getBuffer() = buffer
+
 }
