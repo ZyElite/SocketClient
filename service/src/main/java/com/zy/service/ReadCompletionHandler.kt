@@ -2,13 +2,13 @@ package com.zy.service
 
 import java.nio.channels.CompletionHandler
 
-class ReadCompletionHandler<T> : CompletionHandler<Int, Conversation<T>> {
+class ReadCompletionHandler<T> : CompletionHandler<Int, Attachment<T>> {
 
-    override fun completed(result: Int, attachment: Conversation<T>) {
-        println("ReadCompletionHandler $result")
+    override fun completed(result: Int, attachment: Attachment<T>) {
+        println("ReadCompletionHandler $result   attachment：${String(attachment.getReadBuffer()?.array()!!)}")
     }
 
-    override fun failed(exc: Throwable, attachment: Conversation<T>) {
+    override fun failed(exc: Throwable, attachment: Attachment<T>) {
         println("ReadCompletionHandler ${exc.message}")
     }
 }

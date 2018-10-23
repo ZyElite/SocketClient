@@ -27,7 +27,10 @@ fun main(args: Array<String>) {
             println("completed：$socketAddress")
             //当获取到连接 重新等待新的连接接入
             attachment?.accept(attachment, this)
-            result.read(ByteBuffer.allocate(1024), Conversation(), ReadCompletionHandler<ByteArray>())
+
+            val session = Attachment<ByteArray>()
+            session.setReadBuffer(ByteBuffer.allocate(1024))
+            result.read(session.getReadBuffer(), session, ReadCompletionHandler<ByteArray>())
         }
 
         override fun failed(exc: Throwable, attachment: AsynchronousServerSocketChannel) {

@@ -37,7 +37,6 @@ public class DirectBufferUtil {
                     return var1;
                 }
             } catch (NumberFormatException var3) {
-                ;
             }
         }
 
